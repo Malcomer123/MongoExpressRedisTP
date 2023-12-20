@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>Proxy HTTP</h1>
+<button onclick="makeRequestUsers(10)">Make a request to get users</button>
+<button onclick="makeRequestPosts(10)">Make a request to get posts</button>
+<script>
+    let startTime, endTime;
+    async function makeRequestUsers(num){
+        startTime = Date.now();
+        let results = new Array(num).fill(1);
+        for(let i=1; i<num; i++) results[i] = await fetch('http://localhost:4000/users?id=' + i).then(res => res.json());
+        endTime=Date.now()
+        console.log("users with redis: ", endTime-startTime, "ms");
+
+        startTime = Date.now();
+        let resultsWithout = new Array(num).fill(1);
+        for(let i=1; i<num; i++) resultsWithout[i] = await fetch('http://localhost:3000/users?id=' + i).then(res => res.json());
+        endTime=Date.now()
+        console.log("users without redis: ", endTime-startTime, "ms");
+    }
+
+    async function makeRequestPosts(num){
+        startTime = Date.now();
+        let results = new Array(num).fill(1);
+        for(let i=1; i<num; i++) results[i] = await fetch('http://localhost:4000/posts?id=' + i).then(res => res.json());
+        endTime=Date.now();
+        console.log("posts with redis: ", endTime-startTime, "ms");
+
+        startTime = Date.now();
+        let resultsWithout = new Array(num).fill(1);
+        for(let i=1; i<num; i++) resultsWithout[i] = await fetch('http://localhost:3000/posts?id=' + i).then(res => res.json());
+        endTime=Date.now()
+        console.log("posts without redis: ", endTime-startTime, "ms");
+
+    }
+</script>
+</body>
+</html>

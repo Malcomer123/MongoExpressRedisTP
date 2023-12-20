@@ -1,0 +1,9 @@
+GET http://localhost:3000/posts?id=5
+Accept: application/json
+
+###
+
+GET http://localhost:3000/users?id=5
+Accept: application/json
+
+###
